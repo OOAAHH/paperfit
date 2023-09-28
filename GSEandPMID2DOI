@@ -47,7 +47,7 @@ def main(input_csv, output_csv):
 
 if __name__ == "__main__":
     input_csv = "/PATH/in.csv"  # 输入文件名
-    output_csv = "/UPATH/out.csv"  # 输出文件名
+    output_csv = "/PATH/out.csv"  # 输出文件名
     main(input_csv, output_csv)
 
 
