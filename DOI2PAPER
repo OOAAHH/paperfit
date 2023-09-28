@@ -1,0 +1,56 @@
+#从DOI获取文章的详细信息
+import csv
+import requests
+import time
+
+CROSSREF_BASE_URL = "https://api.crossref.org/works"
+
+def get_paper_details_from_doi(doi):
+    """从DOI获取文章的详细信息"""
+    url = f"{CROSSREF_BASE_URL}/{doi}"
+    response = requests.get(url)
+    # 初始化默认值
+    details = {
+        "DOI": doi,
+        "Authors": "error",
+        "Abstract": "error",
+        "Publication Year": "error",
+        "Title": "error"
+    }
+
+    try:
+        data = response.json()
+        item = data['message']
+        authors = ", ".join([author.get('given', '') + ' ' + author.get('family', '') for author in item.get('author', [])])
+        abstract = item.get('abstract', "error")
+        publication_year = item.get('published-print', {}).get('date-parts', [])[0][0] if item.get('published-print') else "error"
+        title = item.get('title', ["error"])[0]
+
+        details["Authors"] = authors
+        details["Abstract"] = abstract
+        details["Publication Year"] = publication_year
+        details["Title"] = title
+    except Exception as e:
+        print(f"Error processing DOI {doi}: {e}")
+
+    time.sleep(0.1)  # 延迟0.1秒
+    return details
+
+def main(input_csv, output_csv):
+    with open(input_csv, 'r') as infile, open(output_csv, 'w', newline='') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+
+        # 写入表头
+        writer.writerow(["DOI", "Authors", "Abstract", "Publication Year", "Title"])
+
+        for row in reader:
+            doi = row[0]  # 假设DOI是CSV文件的第一列
+            details = get_paper_details_from_doi(doi)
+            writer.writerow([details["DOI"], details["Authors"], details["Abstract"], details["Publication Year"], details["Title"]])
+
+
+if __name__ == "__main__":
+    input_csv = "/PATH/in.csv"  # 输入文件名
+    output_csv = "/PATH/out.csv"  # 输出文件名
+    main(input_csv, output_csv)
