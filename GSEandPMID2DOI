@@ -1,0 +1,47 @@
+#从GSE、GSM、PBJ编号获出发获取文献信息
+import csv
+import requests
+from Bio import Entrez
+
+Entrez.email = "name@name.com"
+Entrez.tool = "name"
+Entrez.api_key = "YOUR_NCBI_API_KEY"
+
+NCBI_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+
+def get_pmid_from_identifier(identifier):
+    """从GSE、GSM、PBJ编号获取PMID"""
+    response = requests.get(f"{NCBI_BASE_URL}/esearch.fcgi?db=pubmed&term={identifier}&retmode=json")
+    data = response.json()
+    pmids = data.get("esearchresult", {}).get("idlist", [])
+    return pmids[0] if pmids else None
+
+def get_paper_details_from_pmid(pmid):
+    """从PMID获取文章的详细信息"""
+    response = requests.get(f"{NCBI_BASE_URL}/esummary.fcgi?db=pubmed&id={pmid}&retmode=json")
+    data = response.json()
+    paper = data.get("result", {}).get(pmid, {})
+    return {
+        "DOI": paper.get("elocationid", ""),
+        "Authors": ", ".join([author["name"] for author in paper.get("authors", [])]),
+        "Publication Date": paper.get("pubdate", ""),
+        "Title": paper.get("title", "")
+    }
+
+def main(input_csv, output_csv):
+    with open(input_csv, 'r') as infile, open(output_csv, 'w', newline='') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+        # 写入表头
+        writer.writerow(["Identifier", "DOI", "Authors", "Publication Date", "Title"])
+        for row in reader:
+            identifier = row[0]
+            pmid = get_pmid_from_identifier(identifier)
+            if pmid:
+                details = get_paper_details_from_pmid(pmid)
+                writer.writerow([identifier, details["DOI"], details["Authors"], details["Publication Date"], details["Title"]])
+
+if __name__ == "__main__":
+    input_csv = "/PATH/in.csv"  # 输入文件名
+    output_csv = "/UPATH/out.csv"  # 输出文件名
+    main(input_csv, output_csv)
