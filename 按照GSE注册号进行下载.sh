@@ -11,9 +11,11 @@ fi
 mkdir -p $1
 prefix=$(echo $1 | cut -c 1-$((${#1}-3)))
 
+#在这里使用了proxychain进行代理设置
+#ftp下载使用socks5的代理设置
 #递归下载该GSE下的所有元数据
-proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /Users/sunhao/DRaw/
-#wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /Users/sunhao/DRaw/
+proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /you_path/
+
 
 #输出下载成功
 echo "Successed downloading $1"
