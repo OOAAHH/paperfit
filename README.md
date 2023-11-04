@@ -4,7 +4,7 @@ paperfit
 
 2023年11月4日
 
-增加了GSE下载的shell脚本
+增加了GSE下载的shell脚本,以及进行文件核对的ipynb文件
 
 # 在centOS上实现并行下载:
   1. 首先安装EPEL仓库
