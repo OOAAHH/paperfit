@@ -2,6 +2,7 @@
 #从GSE、GSM、PBJ编号获出发获取文献信息
 #你需要首先安装request、csv、biopython
 #如果你身处中国大陆，你的网络状况会显著的影响这段代码的效果，所以我为你请来了代码佛祖
+#2023.11.06 增加了空行检测和PUBMED没有记录的标记
 
 import csv
 import requests
@@ -18,10 +19,18 @@ def get_pmid_from_identifier(identifier):
     response = requests.get(f"{NCBI_BASE_URL}/esearch.fcgi?db=pubmed&term={identifier}&retmode=json")
     data = response.json()
     pmids = data.get("esearchresult", {}).get("idlist", [])
-    return pmids[0] if pmids else None
+    return pmids[0] if pmids else "没有记录"
 
 def get_paper_details_from_pmid(pmid):
     """从PMID获取文章的详细信息"""
+    if pmid == "没有记录":
+        return {
+            "DOI": "",
+            "Authors": "",
+            "Publication Date": "",
+            "Title": "",
+            "PMID": "PUBMED中没有记录"
+        }
     response = requests.get(f"{NCBI_BASE_URL}/esummary.fcgi?db=pubmed&id={pmid}&retmode=json")
     data = response.json()
     paper = data.get("result", {}).get(pmid, {})
@@ -29,7 +38,8 @@ def get_paper_details_from_pmid(pmid):
         "DOI": paper.get("elocationid", ""),
         "Authors": ", ".join([author["name"] for author in paper.get("authors", [])]),
         "Publication Date": paper.get("pubdate", ""),
-        "Title": paper.get("title", "")
+        "Title": paper.get("title", ""),
+        "PMID": pmid
     }
 
 def main(input_csv, output_csv):
@@ -37,17 +47,19 @@ def main(input_csv, output_csv):
         reader = csv.reader(infile)
         writer = csv.writer(outfile)
         # 写入表头
-        writer.writerow(["Identifier", "DOI", "Authors", "Publication Date", "Title"])
+        writer.writerow(["Identifier", "DOI", "Authors", "Publication Date", "Title", "PMID"])
         for row in reader:
-            identifier = row[0]
+            if not row or not row[0].strip():  # 检查是否为空行或者第一列是否为空
+                writer.writerow(["这是空行", "", "", "", "", ""])
+                continue
+            identifier = row[0].strip()  # 去除可能的空白字符
             pmid = get_pmid_from_identifier(identifier)
-            if pmid:
-                details = get_paper_details_from_pmid(pmid)
-                writer.writerow([identifier, details["DOI"], details["Authors"], details["Publication Date"], details["Title"]])
+            details = get_paper_details_from_pmid(pmid)
+            writer.writerow([identifier, details["DOI"], details["Authors"], details["Publication Date"], details["Title"], details["PMID"]])
 
 if __name__ == "__main__":
-    input_csv = "/PATH/in.csv"  # 输入文件名
-    output_csv = "/PATH/out.csv"  # 输出文件名
+    input_csv = "/你的输入csv地址"  # 输入文件名
+    output_csv = "/输出的csv路径"  # 输出文件名
     main(input_csv, output_csv)
 
 
