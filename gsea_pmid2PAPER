@@ -3,6 +3,8 @@
 #你需要首先安装request、csv、biopython
 #如果你身处中国大陆，你的网络状况会显著的影响这段代码的效果，所以我为你请来了代码佛祖
 #2023.11.06 增加了空行检测和PUBMED没有记录的标记
+#也可以基于DOI获取pmid
+
 
 import csv
 import requests
@@ -15,7 +17,7 @@ Entrez.api_key = "YOUR_NCBI_API_KEY"
 NCBI_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 
 def get_pmid_from_identifier(identifier):
-    """从GSE、GSM、PBJ编号获取PMID"""
+    """从DOI、GSE、GSM、PBJ编号获取PMID"""
     response = requests.get(f"{NCBI_BASE_URL}/esearch.fcgi?db=pubmed&term={identifier}&retmode=json")
     data = response.json()
     pmids = data.get("esearchresult", {}).get("idlist", [])
