@@ -13,20 +13,20 @@ prefix=$(echo $1 | cut -c 1-$((${#1}-3)))
 #FTP服务器的URL,进行FTP按照目录下载, 必须使用“ftp://”, 而这里进行查询的时候必须使用“https://”, 否则进行查询时获取的信息是不正确的, 这很奇怪, 或许和传输协议的具体原理有关.服务器方面为两种协议设置的不同的反应.
 FTP_URL="https://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/suppl/"
 #本地文件存储的目录
-LOCAL_DIR="/home/sunhao/LCA/Lung_atlas/13-20-2/$1/suppl/"
+LOCAL_DIR="/YOU_PATH/$1/suppl/"
 #存储不一致文件列表的文件
-INCONSISTENT_FILES="/home/sunhao/LCA/Lung_atlas/13-20-2/inconsistent_files.txt"
+INCONSISTENT_FILES="/YOU_PATH/inconsistent_files.txt"
 #清空不一致文件列表
 #> $INCONSISTENT_FILES
 #递归下载该GSE下的所有元数据
-#proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /hdd/Lung_atlas/13-20-2/
-#wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /Users/sunhao/DRaw/
+#proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /YOU_PATH/
+#wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /YOU_PATH/
 
-proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /hdd/Lung_atlas/13-20-2/ -o /home/sunhao/stroge/log.txt
+proxychains4 wget -r -c -nH --cut-dirs=3 ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/ -P /YOU_PATH/ -o /YOU_PATH/log.txt
 #根据wget返回值进行判断, 不过高设置重试次数的原因: 不希望出现意外的死循环
 if [ $? -ne 0 ]
 then
-    echo "wget下载失败，重试次数超标。" >> /home/sunhao/LCA/Lung_atlas/13-20-2/download_errors.log
+    echo "wget下载失败，重试次数超标。" >> /YOU_PATH/download_errors.log
 fi
 
 #遍历本地目录中的文件
