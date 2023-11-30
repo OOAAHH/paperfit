@@ -5,7 +5,7 @@
 # 由于变量后面是一个斜杠 /，这个斜杠已经清楚地标示了变量名的结束，
 # 所以花括号是可选的。因此，"$CHECK_DIR"/* 和 "${CHECK_DIR}"/* 在功能上是相同的，都是为了获取CHECK_DIR目录下的所有文件。
 
-# 全局变量 请勿更改
+# 全局变量 一般不改 毕竟我们一般只在乎数据的完整性
 DOWNLOAD_URL="ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/suppl/"
 CHECK_URL="https://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/suppl/"
 DOWNLOAD_DIR="$2"
