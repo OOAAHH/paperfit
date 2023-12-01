@@ -17,6 +17,7 @@ SIZE_DIFFERENCE_FILE="$2/diff.txt"
 LOG_FILE="$2/log.txt"
 ERROR_LOG="$2/download_errors.log"
 PY_CHECK="$2/PY_CHECK_log.txt"
+# 这里需要你提前建立一个合适的环境来运行文件校验
 CONDA_ENV="fileCheck"
 # 全局变量 用户自定义并行下载数
 MAX_JOBS=5
