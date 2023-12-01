@@ -1,6 +1,8 @@
 # read_file.py
 '''
-使用conda 环境 /home/centos/mambaforge/envs/fileCheck
+使用conda 环境 
+
+GEO数据库的一些格式, 暂时没有考虑loom文件
 文件格式: csv, python
 文件格式: gz, shell
 文件格式: tar, shell
@@ -13,10 +15,7 @@
 文件格式: h5Seurat, R
 文件格式: zip, python
 文件格式: tsv, python
-文件格式: png, 数量: 1
-文件格式: py, 数量: 1
 文件格式: mtx, python
-文件格式: pdf, 数量: 2
 '''
 
 import sys
@@ -26,7 +25,7 @@ import h5py
 import pyBigWig
 import scanpy
 import os
-os.environ['R_HOME'] = '/home/sunhao/.conda/envs/R423/lib/R' # from conda env R423
+os.environ['R_HOME'] = 'you_conda_path/lib/R' # from conda env R423
 import rpy2.robjects as ro
 from rpy2.robjects import pandas2ri
 
