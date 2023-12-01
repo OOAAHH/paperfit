@@ -138,7 +138,8 @@ check_file_fit() {
     source activate $CONDA_ENV
     for local_file in "$check_dir"/*; do
         FILENAME=$(basename "$local_file")
-        python /home/sunhao/stroge/hdd/Lung_atlas/13-20-2/read_file.py "$check_dir/$FILENAME" "$PY_CHECK"
+        # read_file.py 的位置, 当然也可以加在全局变量
+        python /you_path/read_file.py "$check_dir/$FILENAME" "$PY_CHECK"
         # 检查Python脚本的退出状态
         if [ $? -ne 0 ]; then
             echo "处理文件 $FILENAME 时出错" >> "$ERROR_LOG"
@@ -147,9 +148,6 @@ check_file_fit() {
     done
     conda deactivate
 }
-
-
-
 
 # 动态显示函数
 show_spinner() {
