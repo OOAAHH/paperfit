@@ -5,11 +5,12 @@
 # 由于变量后面是一个斜杠 /，这个斜杠已经清楚地标示了变量名的结束，
 # 所以花括号是可选的。因此，"$CHECK_DIR"/* 和 "${CHECK_DIR}"/* 在功能上是相同的，都是为了获取CHECK_DIR目录下的所有文件。
 
-# 全局变量 一般不改 毕竟我们一般只在乎数据的完整性
+# 全局变量 请勿更改
 DOWNLOAD_URL="ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/suppl/"
 CHECK_URL="https://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/$1/suppl/"
 DOWNLOAD_DIR="$2"
 CHECK_DIR="$2/$1/suppl"
+LOG_DIR="$2/proxychains_download_log"
 # 全局变量 用户自定义log文件
 INCONSISTENT_FILES="$2/inconsistent_files.txt"
 SIZE_DIFFERENCE_FILE="$2/diff.txt"
@@ -29,7 +30,8 @@ download_file() {
     local gse_id=$1
     local prefix=$(echo $gse_id | cut -c 1-$((${#gse_id}-3)))
     local download_url="ftp://ftp.ncbi.nlm.nih.gov/geo/series/${prefix}nnn/${gse_id}"
-    proxychains4 wget -r -c -nH --cut-dirs=3 "$download_url" -P "$DOWNLOAD_DIR" -o "$LOG_FILE"
+    proxychains4 wget -r -c -nH --cut-dirs=3 "$download_url" -P "$DOWNLOAD_DIR" -o "$LOG_FILE" 2>&1 &
+    # show_spinner $!
     if [ $? -ne 0 ]; then
         echo "wget下载'$gse_id'失败，重试次数超标。" >> "$ERROR_LOG"
     else
@@ -123,6 +125,22 @@ check_file_size() {
     done
 }
 
+# 动态显示函数
+show_spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
+
 # 主函数
 main() {
     # 判断键盘输入值 $1 是GSE编号或者GSE编号的文件 $2 是下载路径
@@ -136,6 +154,7 @@ main() {
         # 如果不是就启动单一下载
     else
         download_file "$1" "$2"
+    fi
 }
 
 main "$@"
