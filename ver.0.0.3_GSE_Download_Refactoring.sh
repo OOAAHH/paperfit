@@ -43,7 +43,6 @@ download_file() {
     fi
 }
 
-
 parallel_download() {
     local gse_list_file=$1
     local download_path=$2
