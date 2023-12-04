@@ -25,7 +25,7 @@ create_directory() {
     mkdir -p "$1"
 }
 
-# 下载单一文件
+
 download_file() {
     local gse_id=$1
     local prefix=$(echo $gse_id | cut -c 1-$((${#gse_id}-3)))
@@ -43,7 +43,7 @@ download_file() {
     fi
 }
 
-# 并行的下载 调用了parallel
+
 parallel_download() {
     local gse_list_file=$1
     local download_path=$2
@@ -58,7 +58,6 @@ parallel_download() {
     cat "$gse_list_file" | parallel -j "$max_jobs" bash "$0" {} "$download_path"
 }
 
-# 当文件错误需要重新下载文件的函数
 redownload_file() {
     local filename=$1
     # 删除原有文件并尝试重新下载
@@ -79,7 +78,6 @@ redownload_file() {
     fi
 }
 
-# 检查文件大小是否一致
 check_file_size() {
     local gse_id=$1
     local prefix=$(echo $gse_id | cut -c 1-$((${#gse_id}-3)))
