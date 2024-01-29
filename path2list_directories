@@ -1,0 +1,28 @@
+import os
+import csv
+
+# target path
+PATH = 'YOU_PATH'
+os.chdir(PATH)
+
+def list_directories(path):
+    directory_info = {}
+    for root, dirs, files in os.walk(path):
+        directory_info[root] = {
+            'files': files,
+            'file_sizes': {file: os.path.getsize(os.path.join(root, file)) for file in files},
+            'subdirectories': dirs
+        }
+    return directory_info
+
+# Call the function with the path to list directories
+directory_info = list_directories(PATH)
+# print(directory_info)
+
+# wrtite path info to csv
+with open('directory_info.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(['directory', 'file', 'file_size'])
+    for directory, info in directory_info.items():
+        for file, file_size in info['file_sizes'].items():
+            writer.writerow([directory, file, file_size])
