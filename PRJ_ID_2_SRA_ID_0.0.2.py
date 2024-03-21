@@ -96,7 +96,7 @@ def get_srr_ids_from_sra(sra_id):
 def get_sra_info(srr_id):
     info = {"format": "Unknown", "size": 0} 
     try:
-        result = subprocess.run(['/home/sunhao/sratoolkit.3.1.0-centos_linux64/bin/vdb-dump', '--info', srr_id], capture_output=True, text=True)
+        result = subprocess.run(['vdb-dump', '--info', srr_id], capture_output=True, text=True)
         for line in result.stdout.split('\n'):
             
             fmt_match = re.search(r"FMT\s+:\s+(.+)", line)
