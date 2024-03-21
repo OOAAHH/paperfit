@@ -61,6 +61,9 @@
 由于缺乏自动化工具，且确实有“在下载文件之前获知文件格式”的需求。新增PRJ_ID_2_SRA_ID_0.0.2.py，用于自动化的从来自NCBI的`Project ID`获取SRR信息。
 - 0.0.2 版本主要新增了查询逻辑和限速逻辑，同时增加了错误处理。
 #### 用法就像这样子：
+
+当前，在使用前，请先安装相关依赖，尤其是sra-tools，脚本中调用了`vdb-dump`工具。
+
 ```$ python ./PRJ_ID_2_SRA_ID_0.0.2.py -e YOU_E.MAIL -k YOU_NCBI_API_KEY -i YOU_PROJECT_ID_FILE -o YOU_OUTPUT_DIR```
 
 # 调用方法
