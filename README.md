@@ -66,6 +66,36 @@
 
 ```$ python ./PRJ_ID_2_SRA_ID_0.0.2.py -e YOU_E.MAIL -k YOU_NCBI_API_KEY -i YOU_PROJECT_ID_FILE -o YOU_OUTPUT_DIR```
 
+- `-k/--api_key` 是可选参数，api_key可以在NCBI的账户设置中获取，这个key可以提高你的查询速率。
+
+- `-v/--view` 是可选参数，用于实时监看程序查询结果，我在这里没有使用。
+
+我个人建议你使用免费的`colab`来进行这个查询，这样可以避免你的查询受到网络的影响。运行起来就会像是下面👇这样。
+<img width="584" alt="Screenshot 2024-03-21 at 17 26 42" src="https://github.com/OOAAHH/paperfit/assets/19518905/158fa8b8-6804-4142-a304-f658316f415b">
+
+程序会首先寻找每个project ID对应的SRA数据库的唯一ID，再进行SRA ID到SRR ID（run ID）的查询，最后再进行SRR ID到SRR文件对应格式信息。
+
+
+
+### 2024年3月21日
+
+新增需求“基于PMID寻找对应期刊的摘要信息”。更新了`PMID_2_Abstract_0.0.1.py`.
+
+#### 用法为：
+
+```$ python /content/drive/MyDrive/pmid2abstract.py -e YOU_E.MAIL -k YOU_NCBI_API_KEY -i YOU_PROJECT_ID_FILE -o YOU_OUTPUT_FILE -v```
+
+我个人建议你使用免费的`colab`来进行这个查询，这样可以避免你的查询受到网络的影响。运行起来就会像是下面👇这样。
+
+<img width="636" alt="Screenshot 2024-03-21 at 17 37 19" src="https://github.com/OOAAHH/paperfit/assets/19518905/52930e54-5a26-4769-a103-bd83b77e5b7f">
+
+- 是的！你可能注意到了我这里使用了`-v/--view`这个选项，正如👆上图中显示的，我们可以看到每个PMID的查询是否成功。
+- 我强烈推荐你在查询结束后，统计一下abstract字段每个结果的字数，有些结果可能不尽如人意，这是因为一部分文章本身确实没有摘要部分。
+  
+- `-k/--api_key` 是可选参数，api_key可以在NCBI的账户设置中获取，这个key可以提高你的查询速率。
+
+- `-v/--view` 是可选参数，用于实时监看程序查询结果，我在这里没有使用。
+
 # 调用方法
 
 ## 在centOS上实现并行下载:
