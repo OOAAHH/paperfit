@@ -1,3 +1,4 @@
+#devtools::install_github("dami82/easyPubMed")
 library(easyPubMed)
 #Use R env R432
 #key1
