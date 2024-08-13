@@ -104,6 +104,11 @@
 
 新增DOI到PMID的py
 
+### 2024年8月13日 
+
+做了一个有趣的工具vdbdump2fastq.py，在获取了vdb-dump SRRID产生的每条reads的基本信息后，把这个文件转换为可以被umitools接受的fastq文件格式。
+- ps: vdb-dump也不失为一种下载方式
+
 # 调用方法
 
 ## 在centOS上实现并行下载:
