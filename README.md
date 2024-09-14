@@ -108,6 +108,10 @@
 
 做了一个有趣的工具vdbdump2fastq.py，在获取了vdb-dump SRRID产生的每条reads的基本信息后，把这个文件转换为可以被umitools接受的fastq文件格式。
 - ps: vdb-dump也不失为一种下载方式
+  
+### 2024年9月13日 
+
+制作了一个基于rust的HRA下载的fastq数据的校验工具。使用方式：修改路径重新编译即可，已经写入了并行的逻辑。
 
 # 调用方法
 
