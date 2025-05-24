@@ -113,6 +113,10 @@
 
 制作了一个基于rust的HRA下载的fastq数据的校验工具。使用方式：修改路径重新编译即可，已经写入了并行的逻辑。
 
+### 2025年5月24日
+
+构建一系列进行文献筛选的pipline，借助ollama deepseek searxng 以及cursor编写了两个版本的pipline，一个是利用在线的api服务进行的，一个是利用ollama的本地部署的deepseekR1:671b实现的。 两边的结果在小样本测试中表现相同。
+
 # 调用方法
 
 ## 在centOS上实现并行下载:
@@ -190,3 +194,16 @@ GNU Parallel 是一个 shell 工具，用于在一台机器上并行执行命令
    ###### 2023年12月1日
 
   增加了校验逻辑, 模拟读取文件来判断完整性.
+
+
+  
+   ###### 2025年5月24日
+
+   - 基本分析
+```bash
+   python fetch_ollama.py input.csv output.csv
+```
+  - 完整分析
+```bash
+    python fetch_ollama.py --ollama-url http://127.0.0.1:11434 --ollama-model deepseek-r1:671b test.csv output_ollama.csv --use-langchain --debug --max-iterations 3
+```
